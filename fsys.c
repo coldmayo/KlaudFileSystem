@@ -64,6 +64,11 @@ int mountFS() {
         return -1;
     }
 
+    SB.numInodes = 5;
+    SB.numBlocks = 100;
+    SB.numDirs = 5;
+    SB.sizeBlocks = sizeof(struct block);
+
     FILE *file;
     file = fopen("disk","r");
     int i;
@@ -85,11 +90,14 @@ int mountFS() {
 
 int unmountFS() {
     if (SB.ifMounted == 1) {
+        SB.numInodes = 0;
+        SB.numBlocks = 0;
+        SB.numDirs = 0;
+        SB.sizeBlocks = sizeof(struct block);
         free(dbs);
         free(inodes);
-        inodes = malloc(sizeof(struct inode)*SB.numInodes);
-        dbs = malloc(sizeof(struct block)*SB.numBlocks);
-        SB.ifMounted == 0;
+        free(dirs);
+        SB.ifMounted = 0;
         return 0;
     }
     return -1;
@@ -244,11 +252,16 @@ int findFileNum(char* fileName) {
 }
 
 void clearAllData() {
+    SB.numInodes = 5;
+    SB.numBlocks = 100;
+    SB.numDirs = 5;
+    SB.sizeBlocks = sizeof(struct block);
     int i;
     for (i=0; i<SB.numInodes; i++) {
         inodes[i].size = -1;
         inodes[i].firstBlock = -1;
         strcpy(inodes[i].name, "klaud__");
+        inodes[i].directory = -1;
     }
 
     for (i=0; i<SB.numBlocks;i++) {

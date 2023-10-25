@@ -80,11 +80,11 @@ void run(int token) {
             break;
         case 2:
             printf("Mounting...\n");
-            syncFS();
             peen = mountFS();
             if (peen != -1) {
                 printf("Mount Success!\n");
             }
+            syncFS();
             break;
         case 3:
             printf("\nKlaudFS is the first Klaud themed File System\n\n");
@@ -93,6 +93,7 @@ void run(int token) {
         case 4:
             printf("Unmounting...\n");
             unmountFS();
+            //syncFS();
             break;
         case 5:
             printf("conjuring file system...\n");
