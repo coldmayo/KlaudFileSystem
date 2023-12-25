@@ -93,7 +93,6 @@ void run(int token) {
         case 4:
             printf("Unmounting...\n");
             unmountFS();
-            //syncFS();
             break;
         case 5:
             printf("conjuring file system...\n");
@@ -127,9 +126,6 @@ void run(int token) {
             break;
         case 12:
             ls();
-            break;
-        case 13:
-            printf("Directory not found\n");
             break;
         case 0:
             printf("Command not recognized, try --help to find usable commands\n");

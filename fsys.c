@@ -17,9 +17,9 @@ int initFS() {
         return -1;
     }
 
-    SB.numInodes = 5;
+    SB.numInodes = 1;
     SB.numBlocks = 100;
-    SB.numDirs = 5;
+    SB.numDirs = 1;
     SB.sizeBlocks = sizeof(struct block);
 
     SB.currDir = 0;
@@ -64,9 +64,9 @@ int mountFS() {
         return -1;
     }
 
-    SB.numInodes = 5;
+    SB.numInodes = 1;
     SB.numBlocks = 100;
-    SB.numDirs = 5;
+    SB.numDirs = 1;
     SB.sizeBlocks = sizeof(struct block);
 
     FILE *file;
@@ -150,6 +150,7 @@ void fsInfo() {
 int findEmptyInode() {
     int i;
     for(i=0; i<SB.numInodes;i++) {
+        printf("%d", i);
         if (inodes[i].firstBlock == -1) {
             return i;
         }
@@ -170,6 +171,7 @@ int findEmptyBlock() {
 }
 
 int makeFile(char * fileName) {
+    addMoreInodes(1);
     int inode = findEmptyInode();
     int block = findEmptyBlock();
     inodes[inode].firstBlock = block;
@@ -305,6 +307,7 @@ int findEmptyFolder() {
 // makes directory
 
 void makeFolder(char * foldName) {
+    addMoreDirs(1);
     int folder = findEmptyFolder();
     dirs[folder-1].index = folder;
     dirs[folder-1].prevDir = SB.currDir;
@@ -353,5 +356,28 @@ void ls() {
         if (dirs[i].prevDir == SB.currDir) {
             printf("%s\n", dirs[i].name);
         }
+    }
+}
+
+void addMoreInodes(int num) {
+    for (int i = 0; num > i; i++) {
+        SB.numInodes = SB.numInodes+1;
+        inodes = realloc(inodes, sizeof(struct inode) * SB.numInodes+1);
+        int j = SB.numInodes-1;
+        inodes[j].size = -1;
+        inodes[j].firstBlock = -1;
+        inodes[j].directory = -1;
+        strcpy(inodes[j].name, "klaud__");
+    }
+}
+
+void addMoreDirs(int num) {
+    for (int i = 0; num > i; i++) {
+        SB.numDirs = SB.numDirs + 1;
+        dirs = realloc(dirs, sizeof(struct folder) * SB.numDirs+1);
+        int j = SB.numDirs-1;
+        dirs[j].index = -1;
+        dirs[j].prevDir = -1;
+        strcpy(dirs[j].name, "klaud__");
     }
 }

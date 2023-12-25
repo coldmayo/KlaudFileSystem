@@ -46,3 +46,5 @@ int findDirNum(char * foldName);
 int getCurrDir(void);
 int cd(char * foldName);
 void ls(void);
+void addMoreInodes(int num);
+void addMoreDirs(int num);
