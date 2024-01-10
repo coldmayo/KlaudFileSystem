@@ -48,3 +48,4 @@ int cd(char * foldName);
 void ls(void);
 void addMoreInodes(int num);
 void addMoreDirs(int num);
+int pwd(void);

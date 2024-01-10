@@ -59,12 +59,11 @@ int parseInput() {
     } else if (strcmp(slice_str(inp, buffer,0,1), "cd") == 0) {
         foldName = slice_str(inp, buffer, 3, strlen(inp));
         int res = cd(foldName);
-        if (res == -1) {
-            return 13;
-        }
         return 7;
     } else if (strcmp(inp, "ls") == 0) {
         return 12;
+    } else if (strcmp(inp, "pwd") == 0) {
+        return 13;
     }
     free(inp);
     free(fileName);
@@ -132,6 +131,9 @@ void run(int token) {
             break;
         case 11:
             printf("Not an available file name\n");
+            break;
+        case 13:
+            pwd();
             break;
     }
 }

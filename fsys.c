@@ -17,9 +17,9 @@ int initFS() {
         return -1;
     }
 
-    SB.numInodes = 1;
+    SB.numInodes = 0;
     SB.numBlocks = 100;
-    SB.numDirs = 1;
+    SB.numDirs = 0;
     SB.sizeBlocks = sizeof(struct block);
 
     SB.currDir = 0;
@@ -328,7 +328,7 @@ int findDirNum(char * foldName) {
 
 int cd(char * foldName) {
     int toFold = findDirNum(foldName);
-    if (strcmp(foldName, "root") == 0 || strcmp(foldName, ".") == 0) {
+    if (strcmp(foldName, "root") == 0 || strcmp(foldName, ".") == 0 || strcmp(foldName, "\0") == 0) {
         SB.currDir = 0;   // take it back to root
         return 0;
     }
@@ -380,4 +380,49 @@ void addMoreDirs(int num) {
         dirs[j].prevDir = -1;
         strcpy(dirs[j].name, "klaud__");
     }
+}
+
+// pwd command
+
+int pwd() {
+    int ROW = 20;
+    int COL = 20;
+    int alldirs;
+    int i;
+    char *b[ROW];
+    int dirName = SB.currDir;
+    for (i=0 ; i<5; i++) {
+        if ((b[i] = malloc(sizeof(char) * COL)) == NULL) {
+            printf("unable to allocate memory \n");
+            return -1;
+        }
+    }
+
+    int j = 0;
+
+    while(alldirs != 1 && j < ROW) {
+        if (SB.currDir == 0 || SB.currDir == -1) {
+            strcpy(b[j], "root");
+            alldirs = 1;
+        } else {
+            strcpy(b[j], findDirName(SB.currDir));
+            //printf("\n%d %d %s\n", dirs[SB.currDir-1].prevDir, SB.currDir, findDirName(SB.currDir));
+            SB.currDir = dirs[SB.currDir-1].prevDir;
+        }
+        j++;
+    }
+
+    char **ptr2 = b;
+    //printf("Contents of second array \n");
+    for (i=j-1; i>=0; i--) {
+        printf("%s/", ptr2[i]);
+    }
+    printf("\n");
+
+    for (i=0 ; i<j+1; i++) {
+        free(b[i]);
+    }
+        
+    SB.currDir = dirName;
+    return 0;
 }
